@@ -11,6 +11,8 @@ import ProjectActions from 'app/actions/projectActions';
 import {Organization} from 'app/types';
 import SentryTypes from 'app/sentryTypes';
 
+import ProjectDataPrivacyRulesPanel from './projectDataPrivacyRulesPanel';
+
 type Props = {
   organization: Organization;
   params: {
@@ -60,17 +62,10 @@ class ProjectDataPrivacyContent extends AsyncView<Props> {
             }}
             features={features}
             disabled={!access.has('project:write')}
-            fields={[
-              fields.dataScrubber,
-              fields.dataScrubberDefaults,
-              fields.scrubIPAddresses,
-              fields.sensitiveFields,
-              fields.safeFields,
-              fields.storeCrashReports,
-              fields.relayPiiConfig,
-            ]}
+            fields={[fields.dataScrubber]}
           />
         </Form>
+        <ProjectDataPrivacyRulesPanel />
       </React.Fragment>
     );
   }
