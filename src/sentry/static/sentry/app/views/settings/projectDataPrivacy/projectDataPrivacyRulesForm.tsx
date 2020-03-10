@@ -119,6 +119,9 @@ const Wrapper = styled('div')`
   grid-template-columns: 157px 300px auto 1fr 40px;
   align-items: center;
   border-bottom: 1px solid ${p => p.theme.offWhite2};
+  @media (min-width: ${p => p.theme.breakpoints[2]}) {
+    grid-template-columns: 157px 300px auto 1fr 40px;
+  }
 `;
 
 const StyledSelectControl = styled(SelectControl)`
