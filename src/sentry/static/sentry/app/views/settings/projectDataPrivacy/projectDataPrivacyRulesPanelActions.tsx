@@ -6,7 +6,7 @@ import ButtonBar from 'app/components/buttonBar';
 import {t} from 'app/locale';
 
 type Props = {
-  onCancel: () => void;
+  onCancel: (event: React.MouseEvent) => void;
   onSave: (event: React.MouseEvent) => void;
 };
 

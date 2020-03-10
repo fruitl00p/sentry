@@ -9,19 +9,51 @@ import {IconAdd} from 'app/icons/iconAdd';
 
 import ProjectDataPrivacyRulesForm, {RuleType} from './projectDataPrivacyRulesForm';
 import ProjectDataPrivacyRulesPanelActions from './projectDataPrivacyRulesPanelActions';
+import {DATA_TYPE, ACTION_TYPE} from './utils';
 
 type State = {
   rules: Array<RuleType>;
+  savedRules: Array<RuleType>;
+  isLoading: boolean;
 };
+
+let rulesFromServer: Array<RuleType> = [
+  {
+    id: 1,
+    action: ACTION_TYPE.MASK,
+    data: DATA_TYPE.BANK_ACCOUNTS,
+    from: 'api_key && !$object',
+  },
+  {
+    id: 2,
+    action: ACTION_TYPE.REMOVE,
+    data: DATA_TYPE.IP_ADDRESSES,
+    from: 'xxx && xxx',
+  },
+];
 
 class ProjectDataPrivacyRulesPanel extends React.Component<{}, State> {
   state: State = {
     rules: [],
+    savedRules: [],
+    isLoading: true,
   };
 
   componentDidMount() {
-    this.handleAddRule();
+    this.loadSavedRules();
   }
+
+  loadSavedRules = () => {
+    // add request here
+    setTimeout(function() {
+      new Promise(resolve => resolve(rulesFromServer)).then(result => {
+        this.setState(prevState => ({
+          ...prevState,
+          isLoading: false,
+        }));
+      });
+    }, 3000);
+  };
 
   formRef: React.RefObject<HTMLFormElement> = React.createRef();
 
@@ -30,7 +62,7 @@ class ProjectDataPrivacyRulesPanel extends React.Component<{}, State> {
       rules: [
         ...prevState.rules,
         {
-          id: prevState.rules.length,
+          id: prevState.rules.length + 1,
         },
       ],
     }));
@@ -68,7 +100,14 @@ class ProjectDataPrivacyRulesPanel extends React.Component<{}, State> {
 
   handleSubmitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('submitting form', this.state.rules);
+    rulesFromServer = this.state.rules;
+  };
+
+  handleCancelForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    this.setState(prevState => ({
+      rules: prevState.savedRules,
+    }));
   };
 
   render() {
@@ -102,7 +141,7 @@ class ProjectDataPrivacyRulesPanel extends React.Component<{}, State> {
         </Panel>
         <ProjectDataPrivacyRulesPanelActions
           onSave={this.handleSaveForm}
-          onCancel={() => console.log('onCancel')}
+          onCancel={this.handleCancelForm}
         />
       </React.Fragment>
     );
